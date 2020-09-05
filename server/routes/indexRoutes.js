@@ -8,5 +8,4 @@ router.get('/get/:id', addressHandler.getAddressById)
 router.put('/update/:id', addressHandler.editAddress)
 router.delete('/delete/:id', addressHandler.deleteAddress)
 
-
 module.exports = router
