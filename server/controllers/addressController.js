@@ -35,4 +35,16 @@ const getAddressById = async (req, res) => {
   }
 }
 
-module.exports = { addAddress, getAddress, getAddressById }
+const editAddress = async (req, res) => {
+  const { firstName, lastName, email, phoneNo, notes, dob, userId } = req.body
+  const query = 'update users set first_name = $1, last_name= $2, email = $3, phoneno = $4, notes = $5, dob = $6 where user_id = $7 returning *'
+  try {
+    const result = await exeQuery(query, [firstName, lastName, email, phoneNo, notes, dob, userId])
+    res.status(200).json(setResponseObj(true, result.rows[0], successMsg, null))
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(setResponseObj(false, null, errorMsg, errorMsg))
+  }
+}
+
+module.exports = { addAddress, getAddress, getAddressById, editAddress }
