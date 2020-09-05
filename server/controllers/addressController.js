@@ -23,4 +23,16 @@ const getAddress = async (req, res) => {
     res.status(500).json(setResponseObj(false, null, errorMsg, errorMsg))
   }
 }
-module.exports = { addAddress, getAddress }
+
+const getAddressById = async (req, res) => {
+  const query = 'select * from users'
+  try {
+    const result = await exeQuery(query)
+    res.status(200).json(setResponseObj(true, result.rows[0], successMsg, null))
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(setResponseObj(false, null, errorMsg, errorMsg))
+  }
+}
+
+module.exports = { addAddress, getAddress, getAddressById }
