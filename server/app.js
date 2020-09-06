@@ -13,3 +13,5 @@ app.use(express.json())
 app.use('/addressbook', indexRoutes)
 
 app.listen(process.env.APP_PORT, () => console.log('listening to: ', process.env.APP_PORT))
+
+module.exports = app
