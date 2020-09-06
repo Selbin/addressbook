@@ -46,6 +46,8 @@ const AddressList = props => {
           })}
         </tbody>
       </table>
+      <div><Link className='button' to='/add'>Add</Link></div>
+
     </div>
   )
 }
