@@ -7,7 +7,10 @@ const api = JSON.parse(JSON.stringify(jsonData)).api
 const AddressInfoPage = props => {
   const [addressInfo, setAddressInfo] = useState([])
   const { id } = useParams()
-  console.log(id)
+  const deleteAddress = () => {
+    const url = api + 'delete/' + id
+    axios.delete(url)
+  }
   useEffect(() => {
     const url = api + 'get/' + id
     axios.get(url).then(response => {
@@ -47,6 +50,9 @@ const AddressInfoPage = props => {
           >
             edit
           </Link>
+          <a href='/' className='button' onClick={deleteAddress}>
+            Delete
+          </a>
         </tf>
       </table>
     </div>
