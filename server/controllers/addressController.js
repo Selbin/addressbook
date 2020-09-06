@@ -14,7 +14,7 @@ const addAddress = async (req, res) => {
 }
 
 const getAddress = async (req, res) => {
-  const query = 'select first_name, last_name, user_id from users'
+  const query = 'select first_name, last_name, user_id, phoneno from users'
   try {
     const result = await exeQuery(query)
     res.status(200).json(setResponseObj(true, result.rows, successMsg, null))
