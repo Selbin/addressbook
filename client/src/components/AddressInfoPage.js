@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsonData from '../settings/setting.json'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 const api = JSON.parse(JSON.stringify(jsonData)).api
 
 const AddressInfoPage = props => {
@@ -30,12 +30,24 @@ const AddressInfoPage = props => {
         </p>
         <p>
           <b>Note:</b>
-          {addressInfo.note}
+          {addressInfo.notes}
         </p>
         <p>
           <b>Date of birth: </b>
           {new Date(addressInfo.dob).toDateString()}
         </p>
+        <tf>
+          <Link
+            className='button'
+            addressinfo={addressInfo}
+            to={{
+              pathname: `/addressinfo/update/${id}`,
+              state: { addressInfo }
+            }}
+          >
+            edit
+          </Link>
+        </tf>
       </table>
     </div>
   )

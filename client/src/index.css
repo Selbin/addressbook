@@ -44,3 +44,43 @@ a {
 p,h4 {
   padding: 5px;
 }
+
+.form-container {
+  padding-left: 85px;
+  padding-bottom: 43px;
+  margin-top: 23px;
+  width: 20%;
+  border: cornflowerblue solid;
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.form-field {
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+
+.button {
+  margin-right: 10px;
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #0c0c0c;
+  background-color: cornflowerblue;
+  padding: 4px 12px 4px 12px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+label {
+  padding-bottom: 10px;
+}
