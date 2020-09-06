@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsonData from '../settings/setting.json'
+import { Link } from 'react-router-dom'
 
 const api = JSON.parse(JSON.stringify(jsonData)).api
 
@@ -25,10 +26,21 @@ const AddressList = props => {
         <tbody>
           {addressList.map((value, i) => {
             return (
-              <tr key={i} id={value.user_id}>
-                <td className='table-style'>{i + 1}</td>
-                <td className='table-style'>{value.first_name + ' ' + value.last_name}</td>
-                <td className='table-style'> {value.phoneno}</td>
+              <tr id={value.user_id} key={i}>
+                <td className='table-style'>
+                  <Link to={`/addressinfo/${value.user_id}`}>{i + 1}</Link>
+                </td>
+
+                <td className='table-style'>
+                  <Link to={`/addressinfo/${value.user_id}`}>
+                    {value.first_name + ' ' + value.last_name}
+                  </Link>
+                </td>
+                <td className='table-style'>
+                  <Link to={`/addressinfo/${value.user_id}`}>
+                    {value.phoneno}
+                  </Link>
+                </td>
               </tr>
             )
           })}

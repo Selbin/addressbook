@@ -36,3 +36,11 @@ nav {
   display: flex;
   justify-content: center;
 }
+a {
+  color: black;
+  text-decoration-line: none;
+}
+
+p,h4 {
+  padding: 5px;
+}
