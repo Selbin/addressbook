@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsonData from '../settings/setting.json'
-import { useParams } from 'react-router-dom'
+import { useParams, withRouter } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
 const api = JSON.parse(JSON.stringify(jsonData)).api
 
@@ -18,7 +19,6 @@ const formatDate = dateString => {
 }
 
 const EditAddressPage = props => {
-  console.log(props)
   const { id } = useParams()
   const [firstName, setFirstname] = useState('')
   const [lastName, setLastName] = useState('')
@@ -26,11 +26,14 @@ const EditAddressPage = props => {
   const [email, setEmail] = useState('')
   const [notes, setNote] = useState('')
   const [dob, setDob] = useState('')
+  const { register, errors, handleSubmit } = useForm()
 
   const updateAddress = () => {
     const url = api + 'update/' + id
     console.log(dob)
     axios.put(url, { firstName, lastName, phoneNo, email, notes, dob })
+    props.history.push(`/addressinfo/${id}`)
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -46,7 +49,7 @@ const EditAddressPage = props => {
   }, [])
   return (
     <div className='container'>
-      <div className='form-container'>
+      <form className='form-container' onSubmit={handleSubmit(updateAddress)}>
         <h4>Address Info</h4>
         <label>
           First Name:
@@ -55,18 +58,32 @@ const EditAddressPage = props => {
             type='text'
             name='firstname'
             value={firstName}
+            ref={register({
+              required: 'Required',
+              pattern: {
+                value: /[A-Z]{3}[A-Z]*/i,
+                message: 'Name should be atleast 3 letter long'
+              }
+            })}
             onChange={event => setFirstname(event.target.value)}
           />
         </label>
+        {errors.firstname && <p className='error'> {errors.firstname.message}</p>}
         <label>
           Last Name: <br />
           <input
             type='text'
             name='lastname'
             value={lastName}
+            ref={register({
+              required: 'Required',
+              message: 'Last name should not be empty'
+            })}
             onChange={event => setLastName(event.target.value)}
           />
         </label>
+        {errors.lastname && <p className='error'>{errors.lastname.message}</p>}
+
         <label>
           Phone Number:
           <br />{' '}
@@ -74,52 +91,71 @@ const EditAddressPage = props => {
             type='number'
             name='phoneno'
             value={phoneNo}
+            ref={register({
+              required: 'Required',
+              pattern: {
+                value: /[0-9]{10}/,
+                message: 'Invalid Phone number'
+              }
+            })}
             onChange={event => setPhoneno(event.target.value)}
           />
         </label>
+        {errors.phoneno && <p className='error'>{errors.phoneno.message}</p>}
         <label>
           Email:
           <br />{' '}
           <input
-            type='email'
             name='email'
             value={email}
+            ref={register({
+              required: 'Required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'invalid email address'
+              }
+            })}
             onChange={event => setEmail(event.target.value)}
           />
         </label>
+        {errors.email && <p className='error'> {errors.email.message}</p>}
         <label>
           Note: <br />
           <input
             type='textarea'
             name='note'
             value={notes}
+            ref={register({
+              required: 'Required',
+              message: 'Note should not be empty'
+            })}
             onChange={event => setNote(event.target.value)}
           />
         </label>
+        {errors.note && <p className='error'>{errors.note.message} </p>}
         <label>
           Date of birth: <br />
           <input
             type='date'
             name='dob'
             value={formatDate(dob)}
+            ref={register({
+              required: 'Required',
+              message: 'DOB is Mandatory'
+            })}
             onChange={event => setDob(formatDate(event.target.value))}
           />
         </label>
+        {errors.dob && <p className='error'> {errors.dob.message}</p>}
         <div>
-          <a
-            href={`/addressinfo/${id}`}
-            className='button'
-            onClick={updateAddress}
-          >
-            Save
-          </a>
-          <a href={`/addressinfo/${id}`} className='button'>
+          <button type='submit'>Save</button>
+          <button onClick={() => props.history.push(`/addressinfo/${id}`)}>
             Cancel
-          </a>
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   )
 }
 
-export default EditAddressPage
+export default withRouter(EditAddressPage)
