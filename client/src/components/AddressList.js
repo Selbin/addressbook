@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsonData from '../settings/setting.json'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 const api = JSON.parse(JSON.stringify(jsonData)).api
 
@@ -46,10 +46,11 @@ const AddressList = props => {
           })}
         </tbody>
       </table>
-      <div><Link className='button' to='/add'>Add</Link></div>
-
+      <div>
+        <button onClick={() => props.history.push('/add')}>Add</button>
+      </div>
     </div>
   )
 }
 
-export default AddressList
+export default withRouter(AddressList)
