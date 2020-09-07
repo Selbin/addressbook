@@ -67,20 +67,23 @@ p,h4 {
 }
 
 
-.button {
-  margin-right: 10px;
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
+button {
+  
   color: #0c0c0c;
-  background-color: cornflowerblue;
+  background-color: beige; 
+  box-shadow: darkblue;
   padding: 4px 12px 4px 12px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
+  margin-top: 8px;
+  margin-right: 5px;
 }
 
 label {
   padding-bottom: 10px;
+}
+
+.error {
+  font: .8em sans-serif;
+  color: red;
+  padding: 0;
+  margin: 0PX;
 }
