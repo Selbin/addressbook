@@ -4,7 +4,6 @@ import jsonData from '../settings/setting.json'
 import { useForm } from 'react-hook-form'
 import { withRouter } from 'react-router-dom'
 
-
 const api = JSON.parse(JSON.stringify(jsonData)).api
 
 const formatDate = dateString => {
