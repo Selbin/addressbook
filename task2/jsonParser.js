@@ -1,8 +1,21 @@
-const nullParser = jsonInput => jsonInput.startsWith('null') ? [null, jsonInput.slice(4).trim()] : null
-const booleanParser = jsonInput => jsonInput.startsWith('true') ? [true, jsonInput.slice(4).trim()] : (jsonInput.startsWith('false') ? [false, jsonInput.slice(5).trim()] : null)
-const commaParser = jsonInput => jsonInput.startsWith(',') ? [',', jsonInput.slice(1).trim()] : null
-const collonParser = jsonInput => jsonInput.startsWith(':') ? [':', jsonInput.slice(1).trim()] : null
-const numberParser = (jsonInput, match = null) => (match = jsonInput.match(/^-?(0|[1-9][0-9]*)(\.[0-9]+)?((e|E)(-|\+)?[0-9]+)?/)) === null ? null : [match[0] * 1, jsonInput.slice(match[0].length).trim()]
+const nullParser = jsonInput =>
+  jsonInput.startsWith('null') ? [null, jsonInput.slice(4).trim()] : null
+const booleanParser = jsonInput =>
+  jsonInput.startsWith('true')
+    ? [true, jsonInput.slice(4).trim()]
+    : jsonInput.startsWith('false')
+    ? [false, jsonInput.slice(5).trim()]
+    : null
+const commaParser = jsonInput =>
+  jsonInput.startsWith(',') ? [',', jsonInput.slice(1).trim()] : null
+const collonParser = jsonInput =>
+  jsonInput.startsWith(':') ? [':', jsonInput.slice(1).trim()] : null
+const numberParser = (jsonInput, match = null) =>
+  (match = jsonInput.match(
+    /^-?(0|[1-9][0-9]*)(\.[0-9]+)?((e|E)(-|\+)?[0-9]+)?/
+  )) === null
+    ? null
+    : [match[0] * 1, jsonInput.slice(match[0].length).trim()]
 
 const stringParser = jsonInput => {
   if (!jsonInput.startsWith('"')) return null
@@ -11,13 +24,25 @@ const stringParser = jsonInput => {
   while (jsonInput[0] !== '"') {
     let end = 1
     if (jsonInput[0] === '\\') {
-      const allowed = { '"': '\\"', '\\': '\\\\', '/': '\\/', 'b': '\b', 'f': '\f', 'n': '\n', 'r': '\r', 't': '\t' }
+      const allowed = {
+        '"': '\\"',
+        '\\': '\\\\',
+        '/': '\\/',
+        b: '\b',
+        f: '\f',
+        n: '\n',
+        r: '\r',
+        t: '\t'
+      }
       if (jsonInput[1] in allowed) {
         result += allowed[jsonInput[1]]
         jsonInput = jsonInput.slice(2)
         continue
-      }
-      else if (jsonInput[1] === 'u' && /[a-fA-F0-9]{4}/.test(jsonInput.slice(2, 6))) end = 6
+      } else if (
+        jsonInput[1] === 'u' &&
+        /[a-fA-F0-9]{4}/.test(jsonInput.slice(2, 6))
+      )
+        end = 6
       else return null
     }
     result += jsonInput.slice(0, end)
@@ -40,7 +65,8 @@ const arrayParser = jsonInput => {
     if (commaParsedResult === null) break
     jsonInput = commaParsedResult[1]
   }
-  if (jsonInput[0] === ']' && jsonInput.length >= 1) return [result, jsonInput.slice(1).trim()]
+  if (jsonInput[0] === ']' && jsonInput.length >= 1)
+    return [result, jsonInput.slice(1).trim()]
   return null
 }
 
@@ -66,12 +92,20 @@ const objectParser = jsonInput => {
     if (commaParserResult === null) break
     jsonInput = commaParserResult[1]
   }
-  if (jsonInput[0] === '}' && jsonInput.length >= 1) return [result, jsonInput.slice(1).trim()]
+  if (jsonInput[0] === '}' && jsonInput.length >= 1)
+    return [result, jsonInput.slice(1).trim()]
   return null
 }
 
 const valueParser = jsonInput => {
-  const parsers = [nullParser, booleanParser, numberParser, stringParser, arrayParser, objectParser]
+  const parsers = [
+    nullParser,
+    booleanParser,
+    numberParser,
+    stringParser,
+    arrayParser,
+    objectParser
+  ]
   for (const parser of parsers) {
     const result = parser(jsonInput)
     if (result !== null) return result
@@ -81,35 +115,36 @@ const valueParser = jsonInput => {
 
 require('fs').readFile('log_raw.txt', (err, data) => {
   if (err) throw err
-  data = data.toString().replace( /[\r\n]+/gm, "" ); 
+  data = data.toString().replace(/[\r\n]+/gm, '')
   let result = valueParser(data.trim())
   let resultObj = [result[0]]
-  while (result[1].trim()!== ''){
-    result =  valueParser(result[1].trim())
+  while (result[1].trim() !== '') {
+    result = valueParser(result[1].trim())
     resultObj = [...resultObj, result[0]]
   }
-  console.log(processedDataString(resultObj));
+  console.log(processedDataString(resultObj))
   console.log(sensor1Count(resultObj))
   console.log(sensor2Count(resultObj))
-
 })
 
-const processedDataString = (resultObj) => {
-    return resultObj.filter((data) => data.packet_type === 1 && data.data_type === 0)
+const processedDataString = resultObj => {
+  return resultObj.filter(
+    data => data.packet_type === 1 && data.data_type === 0
+  )
 }
 
-const sensor1Count = (resultObj) => {
-    let count = 0;
-    resultObj.forEach(data => {
-        if (data.packet_type === 1 && data.data_type === 1) count++
-    });
-    return count/2
+const sensor1Count = resultObj => {
+  let count = 0
+  resultObj.forEach(data => {
+    if (data.packet_type === 1 && data.data_type === 1) count++
+  })
+  return count
 }
 
-const sensor2Count = (resultObj) => {
-    let count = 0;
-    resultObj.forEach(data => {
-        if (data.packet_type === 1 && data.data_type === 2) count++
-    });
-    return count/2
+const sensor2Count = resultObj => {
+  let count = 0
+  resultObj.forEach(data => {
+    if (data.packet_type === 1 && data.data_type === 2) count++
+  })
+  return count
 }
