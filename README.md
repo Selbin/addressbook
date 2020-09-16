@@ -12,5 +12,5 @@
   4. Run `npm start`. This will run the server
 
   ### Task 2
-  1. Go to task to directory
+  1. Go to task directory
   2. Run `node jsonParser.js`
